@@ -13,8 +13,6 @@ function Performer:newError(message)
     error("[" .. self.prefix .. "] " .. message);
 end
 
----@param key unknown
----@param value unknown
 ---@param errorMessage string
 function Performer:errorFromPair(key, value, errorMessage)
     self:newError(
@@ -58,9 +56,11 @@ function Performer:ruleValidity(table, rules)
         if not value or type(value) ~= ruleType then
             local expected = "Rules has been trespassed." ..
                 "\nRule pair: { " .. Fmt:rowData(ruleKey, ruleType) .. " }"
+
             local got = value and
                 "Gotten value: " .. value .. " of type " .. type(value) or
                 "Key does not exist";
+
             self:newError(expected .. "\n" .. got);
         end
     end
