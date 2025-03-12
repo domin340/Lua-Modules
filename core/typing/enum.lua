@@ -25,8 +25,8 @@ local function arrayToPairs(table)
 end
 
 ---@param message string
-function Enum.newError(message)
-    error("[" .. Enum.prefix .. "] " .. message, 1);
+function Enum:newError(message)
+    error("[" .. self.prefix .. "] " .. message, 1);
 end
 
 function Enum.count(enum)
@@ -90,7 +90,7 @@ end
 ---@return T
 function Enum.get(enum, key)
     if not enum[key] then
-        Enum.newError("key: " .. key .. " not found inside of enum!")
+        Enum:newError("key: " .. key .. " not found inside of enum!")
     end
     return enum[key];
 end
@@ -106,7 +106,7 @@ local function sealAndDebug(enum)
     return setmetatable({}, {
         __index = enum,
         __newindex = function(_, key, value)
-            Enum.newError(
+            Enum:newError(
                 " Attempted to create a new index: " ..
                 "{ " .. key .. " = " .. value .. " }"
             );
