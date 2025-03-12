@@ -33,7 +33,7 @@ function DebugFmt:rowInfo(key, value, tabs)
     return indentation ..
         self.rowType(key, value) ..
         "\n" .. indentation ..
-        self.rowData(key, value);
+        self:rowData(key, value);
 end
 
 -- ----------------------------------------------

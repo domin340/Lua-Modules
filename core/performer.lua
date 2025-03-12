@@ -1,3 +1,8 @@
+local PATH = string.sub(..., 1, string.len(...) - string.len("performer"));
+
+---@module "fmt"
+local Fmt = require(PATH .. "fmt");
+
 local Checker = {}
 
 ---@type string
@@ -18,24 +23,18 @@ end
 ---@param table table
 ---@param checker fun(key: string, value: string): boolean, (number | nil)
 function Checker:perform(table, checker)
-    ---@type number
-    local iterationCount = 0;
-
     for key, value in pairs(table) do
-        iterationCount = iterationCount + 1;
-
         local success, code = checker(key, value);
 
         if not success then
             local what = code == 1 and "Key" or code == 2 and "Value" or "Pairs";
 
-            local errorMessage = what .. " failed type checker test.";
+            local errorMessage = what .. " did not pass type checker test!";
 
             self:newError(
                 string.format(
-                    "Iteration: %d.\nLine: {\n%s\n}.\n%s",
-                    iterationCount,
-                    self:rowInfo(key, value, 1),
+                    "Pair: {\n%s\n}.\n%s",
+                    Fmt:rowInfo(key, value, 1),
                     errorMessage
                 )
             );

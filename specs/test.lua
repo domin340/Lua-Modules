@@ -13,7 +13,7 @@ local Colors = Typing.Enum.complex({
     ["Blue"] = "0000FF";
 }
 ]]
-print(DebugFmt:enum(Colors));
+print(Fmt:enum(Colors));
 
 local Vector2 = Typing.Class.new():setClassName("Vector2");
 local Vector3 = Typing.Class.new():setClassName("Vector3"):inherit(Vector2);

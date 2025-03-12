@@ -1,7 +1,7 @@
 local PATH = string.sub(..., 1, string.len(...) - string.len("typing.enum"));
 
----@module "core.typing.checker"
-local TypeChecker = require(PATH .. "typing.checker");
+---@module "core.performer"
+local TypeChecker = require(PATH .. "performer");
 
 ---@class Enum
 local Enum = {};
