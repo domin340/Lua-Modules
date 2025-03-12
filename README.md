@@ -22,6 +22,12 @@ This module consists of:
 
 Works just like in other languagues with exception for possible custom type checking.
 
+**Dependencies**:
+
+- [Performer](core/performer.lua)
+
+*Example*:
+
 ```lua
 local Colors = Typing.Enum.complex({
     Red = "FF0000",
@@ -46,7 +52,9 @@ local Directions = Typing.Enum.new({ "Left", "Right", --[[ and so on]] }) -- if 
 
 #### Class
 
-Just as you expect this type allows you to create a class
+Just as you expect this type allows you to create a class.
+
+*Example*:
 
 ```lua
 ---@class Vector2 : Class
