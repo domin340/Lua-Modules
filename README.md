@@ -27,8 +27,8 @@ local Colors = Typing.Enum.complex({
     Red = "FF0000",
     Green = "00FF00",
     Blue = "0000FF",
-    -- Yellow = 3; -- this will error
-}, "string");
+    -- Yellow = 3; -- this will error, expected type is string
+}, "string"); -- you can also give here your custom method of type fun(key, value): boolean
 
 Colors.Red = "AA00AA" -- you are not allowed to change property of an enum, this errors
 print(Colors.Red) -- "FF0000"
@@ -46,7 +46,7 @@ local Directions = Typing.Enum.new({ "Left", "Right", --[[ and so on]] }) -- if 
 
 #### Class
 
-Just as you expect this type allow you to create a class
+Just as you expect this type allows you to create a class
 
 ```lua
 ---@class Vector2 : Class
@@ -88,5 +88,5 @@ In case when you need to check whenever all properties are defined as you imaged
 
 ## Planned new modules
 
-1. EventManager and Group (allow you to emit signals and listen for them)
+1. EventManager and Group (allows you to emit signals and listen for them)
 2. Container (similar to javascript's array)
