@@ -32,12 +32,16 @@ end
 ---@param withTypes boolean | nil
 ---@return string
 function DebugFmt:resolveTable(tbl, tabs, withTypes)
+    -- Prerequisites
+    -- ----------------------------------------------
     local repetitions = tabs or 0;
     withTypes = withTypes or false;
 
     local tab = string.rep("\t", repetitions);
     local nl = repetitions ~= 0 and "\n" or "";
 
+    -- Row Content
+    -- ----------------------------------------------
     ---@type table<string>
     local temp = {};
     for key, value in pairs(tbl) do
@@ -46,11 +50,12 @@ function DebugFmt:resolveTable(tbl, tabs, withTypes)
         table.insert(temp, typeInfo .. tab .. data);
     end
 
+    -- Whole Content
+    -- ----------------------------------------------
     local start = "{ " .. nl;
     local body = table.concat(temp, ", " .. nl)
     local ending = nl .. "}";
 
-    -- starting brackets
     return start .. body .. ending;
 end
 
