@@ -7,7 +7,4 @@ return {
 
     ---@module "typing.enum"
     Enum = require(PATH .. "typing.enum"),
-
-    ---@module "typing.checker"
-    Checker = require(PATH .. "typing.checker"),
 };
