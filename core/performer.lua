@@ -3,14 +3,27 @@ local PATH = string.sub(..., 1, string.len(...) - string.len("performer"));
 ---@module "fmt"
 local Fmt = require(PATH .. "fmt");
 
-local Checker = {}
+local Performer = {}
 
 ---@type string
-Checker.prefix = "Typing(Debug)";
+Performer.prefix = "Typing(Debug)";
 
 ---@param message string
-function Checker:newError(message)
+function Performer:newError(message)
     error("[" .. self.prefix .. "] " .. message);
+end
+
+---@param key unknown
+---@param value unknown
+---@param errorMessage string
+function Performer:errorFromPair(key, value, errorMessage)
+    self:newError(
+        string.format(
+            "Pair: {\n%s\n}.\n%s",
+            Fmt:rowInfo(key, value, 1),
+            errorMessage
+        )
+    );
 end
 
 -- UTILITIES
@@ -22,7 +35,7 @@ end
 ---if middleware success is false function exists with an error!
 ---@param table table
 ---@param checker fun(key: string, value: string): boolean, (number | nil)
-function Checker:perform(table, checker)
+function Performer:perform(table, checker)
     for key, value in pairs(table) do
         local success, code = checker(key, value);
 
@@ -31,17 +44,28 @@ function Checker:perform(table, checker)
 
             local errorMessage = what .. " did not pass type checker test!";
 
-            self:newError(
-                string.format(
-                    "Pair: {\n%s\n}.\n%s",
-                    Fmt:rowInfo(key, value, 1),
-                    errorMessage
-                )
-            );
+            self:errorFromPair(key, value, errorMessage);
+        end
+    end
+end
+
+---checks whenever pair is desired type and exists else returns an error
+---@param rules table<string | number, type>
+---@param table table
+function Performer:ruleValidity(table, rules)
+    for ruleKey, ruleType in pairs(rules) do
+        local value = table[ruleKey];
+        if not value or type(value) ~= ruleType then
+            local expected = "Rules has been trespassed." ..
+                "\nRule pair: { " .. Fmt:rowData(ruleKey, ruleType) .. " }"
+            local got = value and
+                "Gotten value: " .. value .. " of type " .. type(value) or
+                "Key does not exist";
+            self:newError(expected .. "\n" .. got);
         end
     end
 end
 
 -- ----------------------------------------------
 
-return Checker;
+return Performer;
