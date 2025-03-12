@@ -8,8 +8,10 @@ local DebugFmt = {};
 function DebugFmt.syntaxValue(value)
     if type(value) == "string" then
         return "\"" .. value .. "\"";
-    else
+    elseif type(value) == "number" then
         return value;
+    else
+        return "<" .. tostring(value) .. ">";
     end
 end
 
@@ -22,8 +24,34 @@ end
 function DebugFmt:rowData(key, value)
     return "[" .. self.syntaxValue(key) .. "]" ..
         " = " ..
-        self.syntaxValue(value) ..
-        ";";
+        self.syntaxValue(value);
+end
+
+---@param tbl table
+---@param tabs number | nil
+---@param withTypes boolean | nil
+---@return string
+function DebugFmt:resolveTable(tbl, tabs, withTypes)
+    local repetitions = tabs or 0;
+    withTypes = withTypes or false;
+
+    local tab = string.rep("\t", repetitions);
+    local nl = repetitions ~= 0 and "\n" or "";
+
+    ---@type table<string>
+    local temp = {};
+    for key, value in pairs(tbl) do
+        local data = self:rowData(key, value)
+        local typeInfo = withTypes and tab .. self.rowType(key, value) .. "\n" or "";
+        table.insert(temp, typeInfo .. tab .. data);
+    end
+
+    local start = "{ " .. nl;
+    local body = table.concat(temp, ", " .. nl)
+    local ending = nl .. "}";
+
+    -- starting brackets
+    return start .. body .. ending;
 end
 
 ---@param tabs number | nil
@@ -34,31 +62,6 @@ function DebugFmt:rowInfo(key, value, tabs)
         self.rowType(key, value) ..
         "\n" .. indentation ..
         self:rowData(key, value);
-end
-
--- ----------------------------------------------
-
--- ENUM DEBUG UTILITIES
--- ----------------------------------------------
-
----@param enum table<string, any>
----@param withTypes boolean | nil
----@return string
-function DebugFmt:enum(enum, withTypes)
-    withTypes = withTypes or false;
-
-    ---@type string
-    local temp = "";
-    for key, value in pairs(enum) do
-        local rest = withTypes and
-            -- with types
-            self:rowInfo(key, value, 1) or
-            -- without types
-            "\t" .. self:rowData(key, value);
-        temp = temp .. "\n" .. rest;
-    end
-
-    return string.format("@Enum {%s\n}", temp);
 end
 
 -- ----------------------------------------------
