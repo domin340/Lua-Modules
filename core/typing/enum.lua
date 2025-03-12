@@ -135,7 +135,6 @@ function Enum.complex(enum, t)
     end
 
     Enum.internalTypeCheck(enum, "string", checker);
-    -- ----------------------------------------------
 
     return sealAndDebug(enum);
 end
